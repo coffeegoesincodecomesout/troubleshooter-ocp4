@@ -26,7 +26,7 @@ GREY='\033[37m'
 
 color=('\033[34m' '\033[37m' '\033[01;31m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m' '\033[00m')
 
-#TIMELINE='2022-10-13T10'
+TIMELINE='2022-10-13T'
 #TIMELINE='2022-10-13T02'
 STAMP=$(date +%Y-%m-%d_%H-%M-%S)
 ETCD_NS='openshift-etcd'
@@ -211,4 +211,7 @@ cd namespaces/openshift-kube-apiserver/pods
 cd $OUTPUT_PATH
 #$OUTPUT_PATH/output_kube-apiserver_logs.log
 cat $OUTPUT_PATH/output_keepalived_logs.log $OUTPUT_PATH/output_router_logs.log $OUTPUT_PATH/output_etcd_logs.log $OUTPUT_PATH/output_haproxy_logs.log > $OUTPUT_PATH/output_logs-$STAMP.log
-sort -tT -k2 -k3 $OUTPUT_PATH/output_logs-$STAMP.log
+sort -tT -k2 -k3 $OUTPUT_PATH/output_logs-$STAMP.log > $OUTPUT_PATH/sort.txt
+sort -s -t- -k2 -k3 $OUTPUT_PATH/sort.txt > $OUTPUT_PATH/output_logs-$STAMP.log
+
+cat $OUTPUT_PATH/output_logs-$STAMP.log
