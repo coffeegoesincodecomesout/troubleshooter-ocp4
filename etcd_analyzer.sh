@@ -3,7 +3,7 @@
 STAMP="$(echo $stamp|tr _ ' '|xargs -0 date -d)"
 
 MASTERS=$(oc get nodes |grep master|cut -d ' ' -f1)
-ETCD=( $(oc --as system:admin -n openshift-etcd get -l k8s-app=etcd pods -o name | tr -s '\n' ' ' ) )
+ETCD=( $(oc --as system:admin -n openshift-etcd get -l k8s-app=etcd pods -o name | tr -s '\n' ' ' | sed 's/pod\///g' ) )
 
 
 echo -e ""
