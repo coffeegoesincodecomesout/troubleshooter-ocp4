@@ -55,7 +55,7 @@ echo -e "Found $(oc logs ${ETCD[1]} -c etcd -n openshift-etcd|grep 'leader chang
 echo -e ""
 echo -e "COMPACTION: \n$(oc logs ${ETCD[1]} -c etcd -n openshift-etcd|grep compaction|tail -8|cut -d ':' -f10|cut -c 2-12)"
 echo -e ""
-echo -e "-[echo ${ETCD[2]}]--------------------"
+echo -e "-[ ${ETCD[2]}]--------------------"
 echo -e ""
 oc exec -n openshift-etcd ${ETCD[2]} -c etcdctl -n openshift-etcd -- etcdctl endpoint status -w table
 echo -e ""
