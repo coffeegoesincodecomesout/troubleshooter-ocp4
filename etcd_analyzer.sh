@@ -10,11 +10,11 @@ echo -e ""
 echo -e "-[${ETCD[0]}]--------------------"
 
 echo -e ""
-oc exec ${ETCD[0]} -c etcdctl -- etcdctl endpoint status -w table
+oc exec -n openshift-etcd ${ETCD[0]} -c etcdctl -- etcdctl endpoint status -w table
 echo -e "IPs:"
-for i in $(oc exec ${ETCD[0]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do echo $i && oc exec ${ETCD[0]} -c etcd -- ip a s|grep inet|grep -v inet6|grep -v '127.'|head -2; done
+for i in $(oc exec ${ETCD[0]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do echo $i && oc exec -n openshift-etcd ${ETCD[0]} -c etcd -- ip a s|grep inet|grep -v inet6|grep -v '127.'|head -2; done
 echo -e "Errors and dropped packets:"
-for i in $(oc exec ${ETCD[0]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec ${ETCD[0]} -c etcd -- ip -s link show dev $i; done
+for i in $(oc exec ${ETCD[0]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec -n openshift-etcd ${ETCD[0]} -c etcd -- ip -s link show dev $i; done
 echo -e ""
 echo -e "Latency against API is $(curl -k https://api.$(echo ${ETCD[0]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
 echo -e ""
@@ -32,12 +32,12 @@ echo -e "COMPACTION: \n$(oc logs ${ETCD[0]} -c etcd -n openshift-etcd|grep compa
 echo -e ""
 echo -e "-[${ETCD[1]}]--------------------"
 echo -e ""
-oc exec ${ETCD[1]} -c etcdctl -- etcdctl endpoint status -w table
+oc exec -n openshift-etcd ${ETCD[1]} -c etcdctl -- etcdctl endpoint status -w table
 echo -e ""
 echo -e "IPs:"
-for i in $(oc exec ${ETCD[1]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do echo $i && oc exec ${ETCD[1]} -c etcd -- ip a s|grep inet|grep -v inet6|grep -v '127.'|head -2; done
+for i in $(oc exec ${ETCD[1]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do echo $i && oc exec -n openshift-etcd ${ETCD[1]} -c etcd -- ip a s|grep inet|grep -v inet6|grep -v '127.'|head -2; done
 echo -e "Errors and dropped packets:"
-for i in $(oc exec ${ETCD[1]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec ${ETCD[1]} -c etcd -- ip -s link show dev $i; done
+for i in $(oc exec ${ETCD[1]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec -n openshift-etcd ${ETCD[1]} -c etcd -- ip -s link show dev $i; done
 echo -e ""
 echo -e "Latency against API is $(curl -k https://api.$(echo ${ETCD[1]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
 echo -e ""
@@ -55,12 +55,12 @@ echo -e "COMPACTION: \n$(oc logs ${ETCD[1]} -c etcd -n openshift-etcd|grep compa
 echo -e ""
 echo -e "-[echo ${ETCD[2]}]--------------------"
 echo -e ""
-oc exec ${ETCD[2]} -c etcdctl -n openshift-etcd -- etcdctl endpoint status -w table
+oc exec -n openshift-etcd ${ETCD[2]} -c etcdctl -n openshift-etcd -- etcdctl endpoint status -w table
 echo -e ""
 echo -e "IPs:"
-for i in $(oc exec ${ETCD[2]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do echo $i && oc exec ${ETCD[2]} -c etcd -- ip a s|grep inet|grep -v inet6|grep -v '127.'|head -2; done
+for i in $(oc exec ${ETCD[2]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do echo $i && oc exec -n openshift-etcd ${ETCD[2]} -c etcd -- ip a s|grep inet|grep -v inet6|grep -v '127.'|head -2; done
 echo -e "Errors and dropped packets:"
-for i in $(oc exec ${ETCD[2]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec ${ETCD[2]} -c etcd -- ip -s link show dev $i; done
+for i in $(oc exec ${ETCD[2]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec -n openshift-etcd ${ETCD[2]} -c etcd -- ip -s link show dev $i; done
 echo -e ""
 echo -e "Latency against API is $(curl -k https://api.$(echo ${ETCD[2]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
 echo -e ""
@@ -80,12 +80,12 @@ echo -e ""
 echo -e ""
 echo -e "[NUMBER OF OBJECTS IN ETCD]"
 echo -e ""
-oc exec ${ETCD[0]} -c etcdctl -n openshift-etcd -- etcdctl get / --prefix --keys-only | sed '/^$/d' | cut -d/ -f3 | sort | uniq -c | sort -rn|head -14
+oc exec -n openshift-etcd ${ETCD[0]} -c etcdctl -n openshift-etcd -- etcdctl get / --prefix --keys-only | sed '/^$/d' | cut -d/ -f3 | sort | uniq -c | sort -rn|head -14
 echo -e ""
 
 echo -e "[BIGGEST CONSUMERS]"
 echo -e ""
-oc exec ${ETCD[0]} -c etcdctl -n openshift-etcd -- etcdctl get / --prefix --keys-only > keysonly.txt
+oc exec -n openshift-etcd ${ETCD[0]} -c etcdctl -n openshift-etcd -- etcdctl get / --prefix --keys-only > keysonly.txt
 cat keysonly.txt | grep event |cut -d/ -f3,4| sort | uniq -c | sort -n --rev |head -10
 echo -e "..."
 cat keysonly.txt | grep event |cut -d/ -f3,4,5| sort | uniq -c | sort -n --rev |head -10
