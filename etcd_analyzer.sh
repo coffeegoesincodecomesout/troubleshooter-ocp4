@@ -16,7 +16,7 @@ for i in $(oc exec ${ETCD[0]} -c etcd -n openshift-etcd -- ls /sys/class/net|gre
 echo -e "Errors and dropped packets:"
 for i in $(oc exec ${ETCD[0]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec -n openshift-etcd ${ETCD[0]} -c etcd -- ip -s link show dev $i; done
 echo -e ""
-echo -e "Latency against API is $(curl -k https://api.$(echo ${ETCD[0]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
+echo -e "Latency against API is $(curl -sk https://api.$(echo ${ETCD[0]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
 echo -e ""
 echo -e "LOGS \nstart on $(oc logs ${ETCD[0]} -c etcd -n openshift-etcd|head -60|tail -1|cut -d ':' -f3|cut -c 2-14)"
 echo -e "ends on $(oc logs ${ETCD[0]} -c etcd -n openshift-etcd|tail -1|cut -d ':' -f3|cut -c 2-14)"
@@ -40,7 +40,7 @@ for i in $(oc exec ${ETCD[1]} -c etcd -n openshift-etcd -- ls /sys/class/net|gre
 echo -e "Errors and dropped packets:"
 for i in $(oc exec ${ETCD[1]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec -n openshift-etcd ${ETCD[1]} -c etcd -- ip -s link show dev $i; done
 echo -e ""
-echo -e "Latency against API is $(curl -k https://api.$(echo ${ETCD[1]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
+echo -e "Latency against API is $(curl -sk https://api.$(echo ${ETCD[1]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
 echo -e ""
 echo -e "LOGS \nstart on $(oc logs ${ETCD[1]} -c etcd -n openshift-etcd|head -60|tail -1|cut -d ':' -f3|cut -c 2-14)"
 echo -e "ends on $(oc logs ${ETCD[1]} -c etcd -n openshift-etcd|tail -1|cut -d ':' -f3|cut -c 2-14)"
@@ -64,7 +64,7 @@ for i in $(oc exec ${ETCD[2]} -c etcd -n openshift-etcd -- ls /sys/class/net|gre
 echo -e "Errors and dropped packets:"
 for i in $(oc exec ${ETCD[2]} -c etcd -n openshift-etcd -- ls /sys/class/net|grep -v veth|grep -v lo); do oc exec -n openshift-etcd ${ETCD[2]} -c etcd -- ip -s link show dev $i; done
 echo -e ""
-echo -e "Latency against API is $(curl -k https://api.$(echo ${ETCD[2]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
+echo -e "Latency against API is $(curl -sk https://api.$(echo ${ETCD[2]}| sed 's/.*://').com -w "%{time_connect}\n"|tail -1)"
 echo -e ""
 echo -e "LOGS \nstart on $(oc logs ${ETCD[2]} -c etcd -n openshift-etcd|head -60|tail -1|cut -d ':' -f3|cut -c 2-14)"
 echo -e "ends on $(oc logs ${ETCD[2]} -c etcd -n openshift-etcd|tail -1|cut -d ':' -f3|cut -c 2-14)"
